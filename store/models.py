@@ -9,15 +9,27 @@ class Collection(models.Model):
     title = models.CharField(max_length=255)
     featured_product = models.ForeignKey("Product",on_delete=models.SET_NULL,null=True, related_name="+")
 
+    def __str__(self):
+        return f"{self.title}  {self.featured_product}"
+
+    class Meta:
+        ordering = ["title"]
+
 class Product(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField()
     description = models.TextField()
     unit_price = models.DecimalField(max_digits=6,decimal_places=2)
-    inventary = models.IntegerField()
+    inventory = models.IntegerField()
     last_update = models.DateTimeField(auto_now=True)
     collection = models.ForeignKey(Collection,on_delete=models.PROTECT)
     promotions = models.ManyToManyField(Promotion,)
+
+    def __str__(self) -> str:
+        return f"{self.title} {self.inventory}"
+    
+    class Meta:
+        ordering = ["title"]
 
 class Customer(models.Model):
     MEMEBERSHIP_BRONZE = "B"
@@ -35,6 +47,8 @@ class Customer(models.Model):
     birth_date = models.DateField(null=True)
     membership = models.CharField(max_length=1,choices=MEMBERSHIP_CHOICE,default=MEMEBERSHIP_BRONZE)
 
+    def __str__(self) -> str:
+        return f"{self.first_name} {self.last_name} {self.email} {self.membership}"
 
 
 class Order(models.Model):
@@ -52,6 +66,12 @@ class Order(models.Model):
     placed_at = models.DateTimeField(auto_now_add=True)
     customer = models.ForeignKey(Customer,on_delete=models.PROTECT)
 
+    def __str__(self) -> str:
+        return f"{self.customer.email} {self.placed_at} {self.payment_status}"
+    
+    class Meta:
+        ordering = ["placed_at"]
+
 class Address(models.Model):
     street = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
@@ -68,7 +88,9 @@ class Cart_Item(models.Model):
     cart = models.ForeignKey(Cart,on_delete=models.CASCADE)
     product = models.ForeignKey(Product , on_delete=models.CASCADE)
     quantity = models.PositiveSmallIntegerField()
-    
+
+    def __str__(self) -> str:
+        return f"{self.product}  {self.quantity}"
 
 
 class Order_Item(models.Model):
