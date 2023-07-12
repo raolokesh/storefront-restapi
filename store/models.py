@@ -20,9 +20,9 @@ class Product(models.Model):
     slug = models.SlugField()
     description = models.TextField()
     unit_price = models.DecimalField(max_digits=6,decimal_places=2)
-    inventory = models.IntegerField()
+    inventory = models.IntegerField(null=True)
     last_update = models.DateTimeField(auto_now=True)
-    collection = models.ForeignKey(Collection,on_delete=models.PROTECT)
+    collection = models.ForeignKey(Collection,on_delete=models.PROTECT,related_name="products")
     promotions = models.ManyToManyField(Promotion,)
 
     def __str__(self) -> str:
@@ -94,7 +94,7 @@ class Cart_Item(models.Model):
 
 
 class Order_Item(models.Model):
-    product = models.ForeignKey(Product , on_delete=models.PROTECT)
+    product = models.ForeignKey(Product , on_delete=models.PROTECT,related_name="orderitem")
     order = models.ForeignKey(Order,on_delete=models.PROTECT)
     quantity = models.PositiveSmallIntegerField()
     unit_price = models.DecimalField(max_digits=8,decimal_places=2)

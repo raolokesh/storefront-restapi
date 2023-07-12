@@ -89,7 +89,7 @@ class ProductDetail(APIView):
 @api_view(["GET","POST"])
 def collection_list(request):
     if request.method == "GET":
-        queryset = Collection.objects.annotate(products_count = Count("product")).all()
+        queryset = Collection.objects.annotate(products_count = Count("products")).all()
         serializer = CollectionSerializer(queryset, many = True)
         return Response(serializer.data)
     
@@ -103,8 +103,8 @@ def collection_list(request):
 
 
 @api_view(["GET","PUT","DELETE"]) 
-def collection_detail(request,id):
-        collection = get_object_or_404(Collection.objects.annotate(products_count = Count("product")),pk = id)
+def collection_detail(request,pk):
+        collection = get_object_or_404(Collection.objects.annotate(products_count = Count("products")),pk = pk )
         if request.method == "GET":
             serializer = CollectionSerializer(collection)
             return Response(serializer.data)
@@ -114,7 +114,7 @@ def collection_detail(request,id):
              serializer.save()
              return Response(serializer.data,status=status.HTTP_200_OK)
         elif request.method == "DELETE":
-            if collection.products_count.count() > 0:
+            if collection.products.count()> 0: # type: ignore
                 return Response({"error"},status=status.HTTP_405_METHOD_NOT_ALLOWED)
             collection.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)

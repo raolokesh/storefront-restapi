@@ -33,7 +33,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def create(self,validated_data):
         product = Product(**validated_data)
-        product.other = 1
+        product.other = 1 # type: ignore
         product.save()
         return product
     
