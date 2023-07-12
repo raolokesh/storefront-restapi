@@ -17,8 +17,8 @@ class Collection(models.Model):
 
 class Product(models.Model):
     title = models.CharField(max_length=255)
-    slug = models.SlugField()
-    description = models.TextField()
+    slug = models.SlugField(null=True)
+    description = models.TextField(null=True)
     unit_price = models.DecimalField(max_digits=6,decimal_places=2)
     inventory = models.IntegerField(null=True)
     last_update = models.DateTimeField(auto_now=True)
@@ -98,3 +98,10 @@ class Order_Item(models.Model):
     order = models.ForeignKey(Order,on_delete=models.PROTECT)
     quantity = models.PositiveSmallIntegerField()
     unit_price = models.DecimalField(max_digits=8,decimal_places=2)
+
+
+class Review(models.Model):
+    product = models.ForeignKey(Product,on_delete=models.CASCADE,related_name="reviews")
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    date = models.DateField(auto_now_add=True)
