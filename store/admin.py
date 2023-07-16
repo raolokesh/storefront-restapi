@@ -59,4 +59,11 @@ class OrderAdmin(admin.ModelAdmin):
 
 admin.site.register(models.Order,OrderAdmin)
 
+class Cart(admin.StackedInline):
+    model = models.Cart
 
+class CartItem(admin.ModelAdmin):
+    inline = [Cart]
+    list_display = ["id","cart_id","product","quantity"]
+
+admin.site.register(models.Cart_Item, CartItem)

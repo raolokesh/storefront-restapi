@@ -5,17 +5,23 @@ from . import views
 from pprint import pprint
 
 router = routers.DefaultRouter()
-router.register("product",views.ProductViewSet)
+router.register("products",views.ProductViewSet,basename="products")
 router.register("collection",views.CollectionViewSet)
+router.register("carts",views.CartViewSet)
 
-products_router = routers.NestedDefaultRouter(router,"product",lookup = "product")
-products_router.register("reviews",views.ReviewViewSet,basename="product-reviews-details")
+products_router = routers.NestedDefaultRouter(router,"products",lookup = "product")
+products_router.register("reviews",views.ReviewViewSet,basename="product-reviews")
+
+
+cart_router = routers.NestedDefaultRouter(router,"carts",lookup = "cart")
+cart_router.register("items",views.CartItemViewSet,basename = "cart-items")
 # urlpatterns = router.urls+products_router.urls
 
 
 urlpatterns = [ 
-    path("",include(router.urls)),
-    path("",include(products_router.urls)),
+    path(r"",include(router.urls)),
+    path(r"",include(products_router.urls)),
+    path(r"",include(cart_router.urls)),
 
 ]
 
