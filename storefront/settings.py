@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     "playground",
     "rest_framework",
     "django_filters",
-    
+    "core",
     
 ]
 
@@ -58,7 +58,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
-
+ 
 ROOT_URLCONF = "storefront.urls"
 
 TEMPLATES = [
@@ -142,3 +142,5 @@ REST_FRAMEWORK ={
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE":10
 }
+
+AUTH_USER_MODEL = "core.User"

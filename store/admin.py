@@ -1,11 +1,11 @@
 # from urllib.parse import urlencode
 from django.contrib import admin
+
 from django.urls import reverse
 from django.utils.html import format_html
 from django.utils.http import  urlencode
 # Register your models here.
 from . import models
-
 
 
 class CollectionAdmin(admin.ModelAdmin):
@@ -26,7 +26,8 @@ class CustomerAdmin(admin.ModelAdmin):
     list_display = ("first_name","last_name","email","membership",)
     list_editable = ("membership",)
     list_per_page = 10
-    ordering = ["first_name","last_name"]
+    list_select_related = ["user"]
+    ordering = ["user__first_name","user__last_name"]
     search_fields = ["first_name__istartswith",'last_name__startswith']
 
 admin.site.register(models.Customer,CustomerAdmin)
