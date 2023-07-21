@@ -1,6 +1,7 @@
 from django.urls import path,include
 from rest_framework.routers import SimpleRouter,DefaultRouter
 from rest_framework_nested import routers
+from rest_framework.urlpatterns import format_suffix_patterns
 from . import views
 from pprint import pprint
 
@@ -8,6 +9,7 @@ router = routers.DefaultRouter()
 router.register("products",views.ProductViewSet,basename="products")
 router.register("collection",views.CollectionViewSet)
 router.register("carts",views.CartViewSet)
+router.register("customers",views.CustomerViewSet) 
 
 products_router = routers.NestedDefaultRouter(router,"products",lookup = "product")
 products_router.register("reviews",views.ReviewViewSet,basename="product-reviews")
@@ -24,6 +26,7 @@ urlpatterns = [
     path(r"",include(cart_router.urls)),
 
 ]
+
 
 
 # urlpatterns = [

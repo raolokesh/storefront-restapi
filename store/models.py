@@ -65,6 +65,11 @@ class Customer(models.Model):
     def email(self):
         return self.user.email
     
+    class Meta:
+        permissions = [
+            {"view_history","can_view_history"}
+        ]
+    
 
 class Order(models.Model):
     PAYMENT_PENDING = "P"
@@ -79,14 +84,16 @@ class Order(models.Model):
 
     payment_status = models.CharField(max_length=1,choices=PAYMENT_STATUS_CHOICE,default=PAYMENT_PENDING)
     placed_at = models.DateTimeField(auto_now_add=True)
-    customer = models.ForeignKey(Customer,on_delete=models.PROTECT)
-
+    customer = models.ForeignKey(Customer,on_delete=models.PROTECT,related_name= "order")
+ 
     def __str__(self) -> str:
         return f"{self.customer.email} {self.placed_at} {self.payment_status}"
     
     class Meta:
         ordering = ["placed_at"]
-
+        permissions = [
+            ("cancel_order",'can cancel order')
+        ]
 class Address(models.Model):
     street = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
