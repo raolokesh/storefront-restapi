@@ -123,7 +123,7 @@ class Cart_Item(models.Model):
 
 class Order_Item(models.Model):
     product = models.ForeignKey(Product , on_delete=models.PROTECT,related_name="orderitem")
-    order = models.ForeignKey(Order,on_delete=models.PROTECT)
+    order = models.ForeignKey(Order,on_delete=models.PROTECT,related_name="items")
     quantity = models.PositiveSmallIntegerField()
     unit_price = models.DecimalField(max_digits=8,decimal_places=2)
 
