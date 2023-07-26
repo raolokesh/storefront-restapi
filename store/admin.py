@@ -15,10 +15,25 @@ class CollectionAdmin(admin.ModelAdmin):
 
 admin.site.register(models.Collection,CollectionAdmin)
 
+class ProductImageInline(admin.TabularInline):
+    model = models.ProductImage
+    readonly_fields = ['thumbnail']
+
+    def thumbnail(self,instance):
+        if instance.image.name != "":
+            return format_html(f"<img src = '{instance.image.url}' class = 'thumbnail'>") 
+        return f""
+
 class ProductAdmin(admin.ModelAdmin):
-    search_fields = ["title"]
-    list_display = ("title","inventory",)
+    prepopulated_fields={'slug':["title"]}
+    inlines = [ProductImageInline]
+    search_fields = ["title","collection"]
+    list_display = ("title","inventory","collection",'unit_price')
     
+    class Media:
+        css = {
+            "all":['store/styles.css']
+        }
 
 admin.site.register(models.Product,ProductAdmin)
 

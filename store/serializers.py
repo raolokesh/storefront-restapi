@@ -3,7 +3,7 @@ from decimal import Decimal
 from django.db import transaction
 from store.signals import order_created
 
-from store.models import Cart_Item, Customer, Order, Order_Item, Product,Collection,Review,Cart
+from store.models import Cart_Item, Customer, Order, Order_Item, Product,Collection, ProductImage,Review,Cart
 
 class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -13,12 +13,22 @@ class CollectionSerializer(serializers.ModelSerializer):
     products_count = serializers.IntegerField(read_only = True)
 
 
-class ProductSerializer(serializers.ModelSerializer):  
+class ProductImageSerializer(serializers.ModelSerializer):
+    def create(self, validated_data):
+        product_id = self.context["product_id"]
+        return ProductImage.objects.create(product_id=product_id,**validated_data)
+    class Meta:
+        model = ProductImage
+        fields = ["id","image"]
 
+
+
+class ProductSerializer(serializers.ModelSerializer):  
+    images = ProductImageSerializer(many = True,read_only = True)
     class Meta:
         model = Product
         fields = ["id","title","unit_price","collection_name","description",
-                  "price_with_tax","inventory", "collection",]
+                  "price_with_tax","inventory", "collection","images"]
         
     # inventory = serializers.IntegerField()
     # title = serializers.CharField(max_length = 255)
@@ -177,3 +187,6 @@ class CreateOrderSerializer(serializers.Serializer):
             order_created.send_robust(self.__class__,order = order)
 
             Cart.objects.filter(pk = cart_id).delete()
+
+
+
