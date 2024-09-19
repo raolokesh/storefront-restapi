@@ -150,7 +150,7 @@ REST_FRAMEWORK ={
     ),
     'COERCE_DECIMAL_TO_STRING' : False,
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
-    "PAGE_SIZE":10
+    "PAGE_SIZE":12
 }
 
 SIMPLE_JWT = {
@@ -185,3 +185,11 @@ DEFAULT_FROM_EMAIL = 'test@test.com'
 ADMINS = [
     ('Lokesh','admin@lokesh.com')
 ]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:4200",  # Add your frontend origin here
+    # "https://yourapp.com",    # Add other allowed origins as needed
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
